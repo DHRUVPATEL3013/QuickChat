@@ -38,13 +38,9 @@ Thumbs.db
 # Coverage reports
 coverage/
 
-
-
-# Python (if backend uses Python)
 __pycache__/
 *.pyc
 venv/
-
 
 frontend/chatbot-frontend/src/pages/backup_chat.jsx
 
