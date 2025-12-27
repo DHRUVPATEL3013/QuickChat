@@ -35,6 +35,9 @@ class MessageOut(BaseModel):
     sender_saved_name:str
     recipient: str
     content: str
+    media_url: Optional[str]=None
+    media_type: Optional[str]=None
+    
     timestamp: datetime
     status: MessageStatus
     is_bot_response: bool

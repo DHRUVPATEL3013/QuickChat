@@ -7,6 +7,8 @@ from core.oauth2 import get_current_user
 from datetime import date
 import os
 import shutil
+import cloudinary
+import cloudinary.uploader
 router=APIRouter()
 UPLOAD_DIR="static/"
 @router.get("/get-profile",response_model=UserOut)
@@ -42,17 +44,28 @@ def update_profile(id:int,
     user.gender=gender if gender else user.gender
     user.dob=dob if dob else user.dob
 
-    file_path = None
-    if profile_pic:
-        file_ext = profile_pic.filename.split(".")[-1]
-        file_name = f"{user.phone}_profile_pic.{file_ext}"
-        file_path = os.path.join(UPLOAD_DIR, file_name)
-        if user.profile_pic:
+    # file_path = None
+    # if profile_pic:
+    #     file_ext = profile_pic.filename.split(".")[-1]
+    #     file_name = f"{user.phone}_profile_pic.{file_ext}"
+    #     file_path = os.path.join(UPLOAD_DIR, file_name)
+    #     if user.profile_pic:
 
-            os.remove(user.profile_pic)
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(profile_pic.file, buffer)
-    user.profile_pic=file_path if profile_pic else user.profile_pic
+    #         os.remove(user.profile_pic)
+    #     with open(file_path, "wb") as buffer:
+    #         shutil.copyfileobj(profile_pic.file, buffer)
+    file_content=profile_pic.file if profile_pic else None
+    folder="Profile Pics"
+    if profile_pic:
+        upload_result=cloudinary.uploader.upload(
+            file_content,
+            folder=folder,
+            public_id=f"{user.phone}_profile_pic_{profile_pic.filename}",
+            resource_type="auto"
+
+        )
+
+        user.profile_pic=upload_result["secure_url"]
 
     db.commit()
     db.refresh(user)

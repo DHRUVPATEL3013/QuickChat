@@ -39,6 +39,8 @@ def serialize_message(msg: Message,db:Session=Depends(get_db)):
         "sender_saved_name":contact.saved_name if contact else msg.sender.phone,
         "recipient": msg.recipient.phone if msg.recipient else None,
         "content": msg.content,
+        "media_url": msg.media_url,
+        "media_type": msg.media_type,
         "timestamp": msg.timestamp.isoformat() if msg.timestamp else None,
         "status": msg.status.value if msg.status else "sent",
         "is_bot_response": bool(msg.is_bot_response),
@@ -63,6 +65,8 @@ async def send_message(data: MessageCreate, current_user: User = Depends(get_cur
             sender_id=current_user.id,
             recipient_id=recipient.id,
             content=data.content,
+            media_url=None,
+            media_type=None,
             is_bot_response=False,
             status=MessageStatus.sent
         )

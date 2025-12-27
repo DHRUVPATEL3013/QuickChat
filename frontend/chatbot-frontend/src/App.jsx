@@ -2,37 +2,37 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Signup from "./pages/signup";
 import Login from "./pages/login";
-import Chat from "./pages/chat";
+// import Chat from "./pages/chat";
 import Chatt from "./pages/chatt";
-import "./App.css"
+// import "./App.css"
 import Profile from "./pages/profile";
 import Home from "./Home";
 function App() {
   return (
-//     <Router>
-    
-//        <div>
-//         <Link to="/auth/signup">Signup</Link>
+    //     <Router>
 
-// </div>
+    //        <div>
+    //         <Link to="/auth/signup">Signup</Link>
 
-//       <Routes>
-//         
-//       </Routes>
-//     </Router>
+    // </div>
 
-<Router>
+    //       <Routes>
+    //         
+    //       </Routes>
+    //     </Router>
 
-<Routes>
-  <Route path="/" element={<Home/>}/>
-  <Route path="/login" element={<Login />} />
-  <Route path="/signup" element={<Signup />} />
+    <Router>
 
-         <Route path="/chat" element={<Chat />} />
-        <Route path="/chatt" element={<Chatt />}/>
-       <Route path="/profile" element={<Profile/>}/>
-</Routes>
-</Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* <Route path="/chat" element={<Chat />} /> */}
+        <Route path="/chatt" element={<Chatt />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+    </Router>
 
 
   );

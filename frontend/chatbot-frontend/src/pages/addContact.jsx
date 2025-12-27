@@ -1,38 +1,3 @@
-// import axios from "axios"
-// import { useState } from "react"
-
-// function AddContact({token}){
-//     const [contact,setContact]=useState("")
-//     const [name,setName]=useState("")
-//     const addContact=()=>{
-//         axios.post("http://127.0.0.1:8000/add-contact",
-            
-//         {
-//             contact_phone:contact,
-//             saved_name:name
-//         },
-//          { headers: { Authorization: `Bearer ${token}` } }
-
-//     )
-//     }
-//     return(
-
-//         <>
-//         <label htmlFor="addcontact">addcontact</label>
-//         <input type="text" id="addcontact" value={contact} onChange={(e)=>setContact(e.target.value)} />
-
-//             <label htmlFor="savedname">name to save</label>
-//         <input type="text" id="savedname" value={name} onChange={(e)=>setName(e.target.value)} />
-
-
-//         <button onClick={addContact}>add contact</button>
-//         </>
-
-//     )
-// }
-
-// export default AddContact
-
 import axios from "axios"
 import { useState } from "react"
 

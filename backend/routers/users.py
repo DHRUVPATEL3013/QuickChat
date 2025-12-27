@@ -8,6 +8,8 @@ from datetime import datetime,date
 from models import User
 import os
 import shutil
+import cloudinary
+import cloudinary.uploader
 router = APIRouter()
 UPLOAD_DIR="static/"
 @router.post("/signup")
@@ -21,14 +23,23 @@ def signup(
     user = db.query(User).filter(User.phone == phone).first()
     if user:
         raise HTTPException(status_code=400, detail="Email already registered")
-    file_path = None
-    if profile_pic:
-        file_ext = profile_pic.filename.split(".")[-1]
-        file_name = f"{phone}_profile_pic.{file_ext}"
-        file_path = os.path.join(UPLOAD_DIR, file_name)
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(profile_pic.file, buffer)
-    new_user = User(fullname=fullname,phone=phone,gender=gender,dob=dob,profile_pic=file_path,created_at=datetime.utcnow())
+    # file_path = None
+    # if profile_pic:
+    #     file_ext = profile_pic.filename.split(".")[-1]
+    #     file_name = f"{phone}_profile_pic.{file_ext}"
+    #     file_path = os.path.join(UPLOAD_DIR, file_name)
+    #     with open(file_path, "wb") as buffer:
+    #         shutil.copyfileobj(profile_pic.file, buffer)
+    file_content=profile_pic.read()
+    folder="Profile Pic"
+    upload_result=cloudinary.uploader.upload(
+        file_content,
+        folder=folder,
+        public_id="{phone}_profile_pic_{profile_pic.filename}",
+        resource_type="auto"
+    )
+
+    new_user = User(fullname=fullname,phone=phone,gender=gender,dob=dob,profile_pic=upload_result["secure_url"],created_at=datetime.utcnow())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)

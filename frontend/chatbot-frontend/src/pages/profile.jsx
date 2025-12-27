@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import './profile.css'
 
 function Profile() {
     const [data, setData] = useState()
@@ -9,7 +10,6 @@ function Profile() {
     const [dobValue, setDobValue] = useState("");
     const [file, setFile] = useState(null);
     const navigate = useNavigate()
-    const formData = new FormData()
    
 
  
@@ -26,7 +26,8 @@ function Profile() {
     }
 
 
-    const updtaeProfileData=async()=>{
+    const updateProfileData=async()=>{
+        const formData = new FormData()
         
     if (fullNameValue) formData.append("fullname", fullNameValue)
      if (genderValue)formData.append("gender", genderValue)
@@ -35,7 +36,7 @@ function Profile() {
 
 
         
-        const res = await axios.put(`http://127.0.0.1:8000/update-profile/${4}`, formData,
+        const res = await axios.put(`http://127.0.0.1:8000/update-profile/${data.id}`, formData,
           
             { headers: { Authorization: `Bearer ${token}` } }
         )
@@ -48,46 +49,61 @@ function Profile() {
     useEffect(() => { getProfile() }, [])
     return (
 
-        <>{data &&
-            <div onClick={() => navigate("/profile")}>
-                <img  style={{width: "60px",
-    height: "60px",
-    borderRadius: "50%",
-    marginTop: "10px",
-    marginLeft: "10px"}} src={`http://127.0.0.1:8000/${data.profile_pic}`} alt="no image" />
-            </div>}
-            {data ? <div>
-
-                <p>Name : {data.fullname}</p>
-                <p>Gender : {data.gender}</p>
-                <p>DOB : {data.dob}</p>
-                
-            </div> : null}
-
-            <input 
-  type="text" 
-  placeholder="Full Name" 
-  onChange={(e) => setFullNameValue(e.target.value)} 
-/>
-
-<select onChange={(e) => setGenderValue(e.target.value)}>
-  <option value="">Select Gender</option>
-  <option value="male">Male</option>
-  <option value="female">Female</option>
-</select>
-
-<input 
-  type="date" 
-  onChange={(e) => setDobValue(e.target.value)} 
-/>
-
-<input 
-  type="file" 
-  onChange={(e) => setFile(e.target.files[0])} 
-/>
-<button onClick={updtaeProfileData}>update profile</button>
-
-        </>
+        <div className="profile-container">
+            <div className="profile-header">
+                <h1>My Profile</h1>
+            </div>
+            {data &&
+                <div className="profile-display">
+                    {/* <img className="profile-pic" src={`http://127.0.0.1:8000/${data.profile_pic}`} alt="Profile Picture" onClick={() => navigate("/profile")} /> */}
+                    <img className="profile-pic" src={data.profile_pic} alt="Profile Picture" onClick={() => navigate("/profile")} />
+                    <div className="profile-info">
+                        <p><strong>Name:</strong> {data.fullname}</p>
+                        <p><strong>Gender:</strong> {data.gender}</p>
+                        <p><strong>DOB:</strong> {data.dob}</p>
+                    </div>
+                </div>
+            }
+            <div className="profile-edit">
+                <h2>Update Profile</h2>
+                <form>
+                    <div className="form-group">
+                        <label htmlFor="fullname">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="fullname"
+                            placeholder="Enter your full name" 
+                            onChange={(e) => setFullNameValue(e.target.value)} 
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="gender">Gender</label>
+                        <select id="gender" onChange={(e) => setGenderValue(e.target.value)}>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="dob">Date of Birth</label>
+                        <input 
+                            type="date" 
+                            id="dob"
+                            onChange={(e) => setDobValue(e.target.value)} 
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="profilePic">Profile Picture</label>
+                        <input 
+                            type="file" 
+                            id="profilePic"
+                            onChange={(e) => setFile(e.target.files[0])} 
+                        />
+                    </div>
+                    <button type="button" className="update-btn" onClick={updateProfileData}>Update Profile</button>
+                </form>
+            </div>
+        </div>
 
     )
 
