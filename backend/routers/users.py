@@ -30,16 +30,19 @@ def signup(
     #     file_path = os.path.join(UPLOAD_DIR, file_name)
     #     with open(file_path, "wb") as buffer:
     #         shutil.copyfileobj(profile_pic.file, buffer)
-    file_content=profile_pic.read()
+    file_content=profile_pic.file if profile_pic else None
     folder="Profile Pic"
-    upload_result=cloudinary.uploader.upload(
-        file_content,
-        folder=folder,
-        public_id="{phone}_profile_pic_{profile_pic.filename}",
-        resource_type="auto"
-    )
+    profile_pic_url=None
+    if profile_pic:
+        upload_result=cloudinary.uploader.upload(
+            file_content,
+            folder=folder,
+            public_id=f"{phone}_profile_pic_{profile_pic.filename}",
+            resource_type="auto"
+        )
+        profile_pic_url=upload_result["secure_url"]
 
-    new_user = User(fullname=fullname,phone=phone,gender=gender,dob=dob,profile_pic=upload_result["secure_url"],created_at=datetime.utcnow())
+    new_user = User(fullname=fullname,phone=phone,gender=gender,dob=dob,profile_pic=profile_pic_url,created_at=datetime.utcnow())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
