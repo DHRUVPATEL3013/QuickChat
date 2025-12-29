@@ -9,6 +9,7 @@ import {  useNavigate } from "react-router-dom";
 import SendMedia from "./SendMedia";
 import ChatInput from "./ChatInput";
 import { API_BASE, WS_BASE } from "../config";
+import appLogo from "../assets/app-logo.png";
 
 function Chatt() {
   
@@ -198,7 +199,7 @@ const chatEndRef = useRef(null);
         <div className="nav-rail">
          <div className="logo">
            
-            <img src="./src/assets/app-logo.png" alt="no image bhai" />
+            <img src={appLogo} alt="no image bhai" />
 
          </div>
           
