@@ -2,11 +2,10 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import { API_BASE } from "../config";
 
-function ChatInput({ token, recipient, getchats }) {
+function ChatInput({ token, recipient, getchats, setMessage }) {
   const [text, setText] = useState("");
   const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const fileRef = useRef();
+  const [preview, setPreview] = useState(null);  const [sending, setSending] = useState(false);  const fileRef = useRef();
 
   const handleFile = (e) => {
     const f = e.target.files[0];
@@ -29,8 +28,9 @@ function ChatInput({ token, recipient, getchats }) {
   };
 
   const send = async () => {
-    if (!recipient) return;
+    if (!recipient || sending) return;
 
+    setSending(true);
     try {
       if (file) {
         const fd = new FormData();
@@ -55,6 +55,8 @@ function ChatInput({ token, recipient, getchats }) {
       getchats();
     } catch (err) {
       console.error(err);
+    } finally {
+      setSending(false);
     }
   };
 
@@ -93,7 +95,9 @@ function ChatInput({ token, recipient, getchats }) {
           onKeyDown={(e) => e.key === "Enter" && send()}
         />
 
-        <button className="send-btn" onClick={send}>➤</button>
+        <button className="send-btn" onClick={send} disabled={sending}>
+          {sending ? "..." : "➤"}
+        </button>
       </div>
     </div>
   );

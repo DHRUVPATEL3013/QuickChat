@@ -40,6 +40,8 @@ const chatEndRef = useRef(null);
     const socket = new WebSocket(`${WS_BASE}?token=${token}`);
     setWs(socket)
     socket.onopen = () => console.log("✅ WebSocket connected");
+    socket.onerror = (error) => console.error("❌ WebSocket error:", error);
+    socket.onclose = (event) => console.log("🔌 WebSocket closed:", event.code, event.reason);
     socket.onmessage = async (event) => {
       const wsData = JSON.parse(event.data)
     
